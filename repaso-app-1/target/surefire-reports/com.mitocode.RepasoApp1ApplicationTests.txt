@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.mitocode.RepasoApp1ApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.636 s -- in com.mitocode.RepasoApp1ApplicationTests

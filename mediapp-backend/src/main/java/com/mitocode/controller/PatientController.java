@@ -1,8 +1,11 @@
 package com.mitocode.controller;
 
+import com.mitocode.dto.PatientDTO;
 import com.mitocode.model.Patient;
 import com.mitocode.service.IPatientService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -17,22 +20,24 @@ public class PatientController {
 
     //@Autowired
     private final IPatientService service; // = new PatientServiceImpl();
+    private final ModelMapper mapper;
 
     @GetMapping
-    public ResponseEntity<List<Patient>> findAll() {
-        List<Patient> list = service.findAll();
+    public ResponseEntity<List<PatientDTO>> findAll() {
+        //List<PatientDTO> list = service.findAll().stream().map(p -> new PatientDTO(p.getIdPatient(), p.getFirstName(), p.getLastName(), p.getDni(), p.getAddress(), p.getPhone(), p.getEmail())).toList();
+        List<PatientDTO> list = service.findAll().stream().map(this::convertToDto).toList();
         return ResponseEntity.ok(list);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Patient> findById(@PathVariable("id") Integer id){
+    public ResponseEntity<PatientDTO> findById(@PathVariable("id") Integer id){
         Patient obj = service.findById(id);
-        return ResponseEntity.ok(obj);
+        return ResponseEntity.ok(convertToDto(obj));
     }
 
     @PostMapping
-    public ResponseEntity<Patient> save(@RequestBody Patient patient){
-        Patient obj = service.save(patient);
+    public ResponseEntity<Void> save(@Valid @RequestBody PatientDTO dto){
+        Patient obj = service.save(convertToEntity(dto));
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdPatient()).toUri();
 
@@ -40,12 +45,12 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Patient> update(@PathVariable("id") Integer id, @RequestBody Patient patient){
-        Patient obj = service.updade(id, patient);
+    public ResponseEntity<PatientDTO> update(@Valid @PathVariable("id") Integer id, @RequestBody PatientDTO dto){
+        Patient obj = service.updade(id, convertToEntity(dto));
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdPatient()).toUri();
 
-        return ResponseEntity.created(location).build();
+        return ResponseEntity.ok(convertToDto(obj));
     }
 
     @DeleteMapping("/{id}")
@@ -58,5 +63,13 @@ public class PatientController {
     public Patient findById(){
         return service.findByIdAndValidate(5);
     }*/
+
+    private PatientDTO convertToDto(Patient patient){
+        return mapper.map(patient, PatientDTO.class);
+    }
+
+    private Patient convertToEntity(PatientDTO dto){
+        return mapper.map(dto, Patient.class);
+    }
 
 }

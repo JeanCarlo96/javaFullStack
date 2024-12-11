@@ -1,0 +1,7 @@
+com\mitocode\controller\PersonController.class
+com\mitocode\RepasoApp1Application.class
+com\mitocode\Service\impl\PersonServiceImpl.class
+com\mitocode\model\Person.class
+com\mitocode\repo\PersonRepoImpl.class
+com\mitocode\Service\IPersonService.class
+com\mitocode\repo\IPersonRepo.class

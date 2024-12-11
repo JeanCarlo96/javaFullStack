@@ -5,8 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface IPatientRepo extends JpaRepository<Patient, Integer> {
-
-    //Patient findById(Integer id);
+public interface IPatientRepo extends IGenericRepo<Patient, Integer> {
 
 }
