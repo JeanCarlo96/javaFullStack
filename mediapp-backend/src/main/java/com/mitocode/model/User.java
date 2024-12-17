@@ -24,7 +24,7 @@ public class User {
     private String username;
 
     @Column(nullable = false, length = 60)
-    private String passw0rd;
+    private String password;
 
     @Column(nullable = false)
     private boolean enable;

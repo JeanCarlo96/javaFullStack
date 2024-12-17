@@ -15,11 +15,11 @@ public class PatientDTO {
     @NotNull
     //@NotEmpty
     //@NotBlank
-    @Size(min = 3, max = 70, message = "fallo la validación")
+    @Size(min = 3, max = 70, message = "{firstname.size}")
     private String firstName;
 
     @NotNull
-    @Size(min = 3, max = 70, message = "fallo la validación")
+    @Size(min = 3, max = 70, message = "{lastname.size}")
     private String lastName;
 
     @NotNull

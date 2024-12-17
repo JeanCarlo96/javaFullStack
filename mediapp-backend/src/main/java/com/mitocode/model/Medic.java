@@ -29,7 +29,7 @@ public class Medic {
     private String lastName;
 
     @Column(nullable = false, length = 10)
-    private String cme;
+    private String cmp;
 
     @Column(length = 250)
     private String photoUrl;

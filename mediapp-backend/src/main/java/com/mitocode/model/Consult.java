@@ -19,7 +19,7 @@ public class Consult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
-    private Integer idConsulta;
+    private Integer idConsult;
 
     @ManyToOne
     @JoinColumn(name = "id_patient", nullable = false, foreignKey = @ForeignKey(name = "FK_CONSULT_PATIENT"))

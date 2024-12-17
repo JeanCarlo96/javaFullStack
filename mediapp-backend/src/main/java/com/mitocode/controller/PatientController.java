@@ -6,6 +6,10 @@ import com.mitocode.service.IPatientService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,14 +17,22 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
+//@RequestMapping("${patient.controller.path}")
+@RequestMapping("/patients")
 @RequiredArgsConstructor
-@RequestMapping("${patient.controller.path}")
 public class PatientController {
 
     //@Autowired
     private final IPatientService service; // = new PatientServiceImpl();
+    @Qualifier("defaultMapper")
     private final ModelMapper mapper;
+
+    @Value("${patient.controller.path}")
+    private String pathUrl;
 
     @GetMapping
     public ResponseEntity<List<PatientDTO>> findAll() {
@@ -57,6 +69,18 @@ public class PatientController {
     public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/hateoas/{id}")
+    public EntityModel<PatientDTO> findByIdHateoas(@PathVariable("id") Integer id) {
+        EntityModel<PatientDTO> resource = EntityModel.of(convertToDto(service.findById(id)));
+
+        // Generar link informativo
+        WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
+
+        resource.add(link1.withRel("patient-self-info"));
+
+        return resource;
     }
 
     /*@GetMapping
